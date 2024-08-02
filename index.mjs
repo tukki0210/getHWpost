@@ -89,23 +89,31 @@ export const handler = async (event, context) => {
         }
     });
 
-    const url_nara = 'https://www.hellowork.mhlw.go.jp/kensaku/GECA110010.do'
+    const url = 'https://www.hellowork.mhlw.go.jp/kensaku/GECA110010.do'
 
-    await page.goto(url_nara)
+    await page.goto(url)
 
     const results = await page.evaluate(() => {
-        const elements = document.querySelectorAll('form table.kyujin.mt1.noborder')
+        const elements = document.querySelectorAll('form table.kyujin.mt1.noborder');
         return Array.from(elements).map(element => {
+            const Occupation = element.querySelector('tr.kyujin_head table td:nth-child(2) div').textContent;
+
             const leftData = element.querySelector('.kyujin_body .left-side');
-            const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent
-            const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
+            const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent;           const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
+            const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
+            const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent;
+
+            const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href');
             return {
+                '職種': Occupation,
                 '会社名': companyName,
                 '仕事の内容': jobDirection,
+                '雇用形態': jobStyle,
+                '賃金':jobSaraly,
+                '求人票': 'https://www.hellowork.mhlw.go.jp/kensaku/' + jobURL
             }
         })
     })
-
 
     console.log(results)
 
