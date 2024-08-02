@@ -1,10 +1,19 @@
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-core'
+import chromium from '@sparticuz/chromium'
+
+chromium.setHeadlessMode = true
+chromium.setGraphicsMode = false
 
 export const handler = async (event, context) => {
 
     const url_nara = 'https://www.hellowork.mhlw.go.jp/kensaku/GECA110010.do'
 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless
+    })
     const page = await browser.newPage();
 
     await page.setRequestInterception(true);
@@ -105,3 +114,5 @@ export const handler = async (event, context) => {
     await browser.close();
 
 }
+
+handler()
