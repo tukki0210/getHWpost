@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
 
-exports.handler = async (event, context) => {
-    
+export const handler = async (event, context) => {
+
     const url_nara = 'https://www.hellowork.mhlw.go.jp/kensaku/GECA110010.do'
 
     const browser = await puppeteer.launch()
