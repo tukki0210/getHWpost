@@ -99,7 +99,7 @@ export const handler = async (event, context) => {
             const Occupation = element.querySelector('tr.kyujin_head table td:nth-child(2) div').textContent;
 
             const leftData = element.querySelector('.kyujin_body .left-side');
-            const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent;           
+            const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent;
             const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
             const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
             const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent;
@@ -115,7 +115,7 @@ export const handler = async (event, context) => {
                 求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${jobURL}
                 `
 
-                
+
             // return {
             //     '職種': Occupation,
             //     '会社名': companyName,
@@ -124,7 +124,18 @@ export const handler = async (event, context) => {
             //     '賃金':jobSaraly,
             //     '求人票': 'https://www.hellowork.mhlw.go.jp/kensaku/' + jobURL
             // }
-            postSlack(message)
+            const endpoint = 'https://slack.com/api/chat.postMessage'
+            fetch(endpoint, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token: env.SLACK_TOKEN,
+                    channel: env.SLACK_CHANNEL,
+                    text: message
+                })
+            })
         })
     })
 
@@ -132,18 +143,4 @@ export const handler = async (event, context) => {
 
     await browser.close();
 }
-const postSlack = async (message)=> {
-    const endpoint = 'https://slack.com/api/chat.postMessage'
-    await fetch(endpoint,{
-        method: 'post',
-        headers: {
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-            token: env.SLACK_TOKEN,
-            channel: env.SLACK_CHANNEL,
-            text: message   
-        })
-    })
-    
-}
+
