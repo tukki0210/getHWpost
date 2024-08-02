@@ -76,7 +76,7 @@ try {
         'preCheckFlg': 'false',
     }
 
-    // オブジェクトを入力用の文字列に変換
+    // オブジェクトを入力用の文字列に変換する
     const postData = Object.entries(postDataObject).map(data => data.join('=')).join('&')
 
 
