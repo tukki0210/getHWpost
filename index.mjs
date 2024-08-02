@@ -131,8 +131,8 @@ export const handler = async (event, context) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    token: env.SLACK_TOKEN,
-                    channel: env.SLACK_CHANNEL,
+                    token: process.env.SLACK_TOKEN,
+                    channel: process.env.SLACK_CHANNEL,
                     text: message
                 })
             })
