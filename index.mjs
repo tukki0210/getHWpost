@@ -103,7 +103,7 @@ export const handler = async (event, context) => {
             const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
             const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent;
 
-            const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href');
+            const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href').substring(2);
             return {
                 '職種': Occupation,
                 '会社名': companyName,
