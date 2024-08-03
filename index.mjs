@@ -120,14 +120,16 @@ export const handler = async (event, context) => {
 
 
     await browser.close();
-    
+
     const token = process.env.SLACK_TOKEN
 
     const channel = process.env.SLACK_CHANNEL
 
     const client = new WebClient(token);
 
-    results.map(result => {
+
+    await Promise.all(results.map(async result => {
+
         const message = `
             職種：${result.Occupation}\n
             会社：${result.companyName}\n
@@ -136,11 +138,13 @@ export const handler = async (event, context) => {
             賃金：${result.jobSaraly}\n
             求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${result.jobURL}
         `
-        ( async () => {
-            const response = await client.chat.postMessage({ channel, message });
-            
-            console.log(response.ok);
-        })();
-    })
+
+        console.log(message)
+
+        const response = await client.chat.postMessage({ channel, message });
+
+        console.log(response.ok);
+
+    }))
 }
 
