@@ -117,8 +117,6 @@ export const handler = async (event, context) => {
         })
     })
 
-    console.log(results)
-
     const message = `
         職種：${results.Occupation}\n
         会社：${results.companyName}\n
@@ -127,6 +125,9 @@ export const handler = async (event, context) => {
         賃金：${results.jobSaraly}\n
         求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${results.jobURL}
     `
+
+
+    console.log(message)
 
     const endpoint = 'https://slack.com/api/chat.postMessage';
     try {
