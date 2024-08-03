@@ -132,7 +132,7 @@ export const handler = async (event, context) => {
 
         const text = 
 `
-\n
+【新着求人】\n
 会社名：${result.companyName}\n
 職種：${result.Occupation}\n
 仕事の内容：${result.jobDirection}\n
@@ -140,7 +140,6 @@ export const handler = async (event, context) => {
 賃金：${result.jobSaraly}\n
 日付：${result.postData}\n
 求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}
-\n
 `
 
         const response = await client.chat.postMessage({ channel, text });
