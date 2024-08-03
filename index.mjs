@@ -103,7 +103,7 @@ export const handler = async (event, context) => {
             const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent;
             const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
             const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
-            const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div div').textContent;
+            const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent;
             const postData = element.querySelector('tr:nth-child(2) div.fs13.ml01').textContent;
             const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href').substring(2);
 
