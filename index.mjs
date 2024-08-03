@@ -132,6 +132,7 @@ export const handler = async (event, context) => {
 
         const text = 
 `
+--------------------------------------------------------------------------\n
 会社名：${result.companyName}\n
 職種：${result.Occupation}\n
 仕事の内容：${result.jobDirection}\n
