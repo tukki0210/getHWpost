@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer-core'
 import chromium from '@sparticuz/chromium'
+import { WebClient } from '@slack/web-api'
 
 
 export const handler = async (event, context) => {
@@ -119,6 +120,12 @@ export const handler = async (event, context) => {
 
 
     await browser.close();
+    
+    const token = process.env.SLACK_TOKEN
+
+    const channel = process.env.SLACK_CHANNEL
+
+    const client = new WebClient(token);
 
     results.map(result => {
         const message = `
@@ -129,24 +136,11 @@ export const handler = async (event, context) => {
             賃金：${result.jobSaraly}\n
             求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${result.jobURL}
         `
-        console.log(message)
-
-        const endpoint = 'https://slack.com/api/chat.postMessage';
-
-        console.log(process.env.SLACK_TOKEN)
-        console.log(process.env.SLACK_CHANNEL)
-        
-        const res = fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                token: process.env.SLACK_TOKEN,
-                channel: process.env.SLACK_CHANNEL,
-                text: message
-            })
-        }).then((res) => res.json()).then(console.log('ok')).catch(console.error)
+        ( async () => {
+            const response = await client.chat.postMessage({ channel, message });
+            
+            console.log(response.ok);
+        })();
     })
 }
 
