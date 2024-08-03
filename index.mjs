@@ -143,7 +143,7 @@ export const handler = async (event, context) => {
                 channel: process.env.SLACK_CHANNEL,
                 text: message
             })
-        })
+        }).then((res) => res.json()).then(console.log('ok')).catch(console.error)
     })
 }
 
