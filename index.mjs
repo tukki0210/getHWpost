@@ -130,7 +130,7 @@ export const handler = async (event, context) => {
 
     await Promise.all(results.map(async result => {
 
-        const message = `
+        const text = `
             職種：${result.Occupation}\n
             会社：${result.companyName}\n
             仕事の内容：${result.jobDirection}\n
@@ -139,9 +139,9 @@ export const handler = async (event, context) => {
             求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${result.jobURL}
         `
 
-        console.log(message)
+        console.log(text)
 
-        const response = await client.chat.postMessage({ channel, message });
+        const response = await client.chat.postMessage({ channel, text });
 
         console.log(response.ok);
 
