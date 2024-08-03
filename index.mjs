@@ -133,8 +133,11 @@ export const handler = async (event, context) => {
 
         const endpoint = 'https://slack.com/api/chat.postMessage';
 
+        console.log(process.env.SLACK_TOKEN)
+        console.log(process.env.SLACK_CHANNEL)
+        
         const res = fetch(endpoint, {
-            method: 'post',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
