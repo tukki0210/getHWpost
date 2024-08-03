@@ -129,6 +129,7 @@ export const handler = async (event, context) => {
     `
 
     const endpoint = 'https://slack.com/api/chat.postMessage';
+    try {
     const res = await fetch(endpoint, {
         method: 'post',
         headers: {
@@ -139,8 +140,9 @@ export const handler = async (event, context) => {
             channel: process.env.SLACK_CHANNEL,
             text: message
         })
-
-    })
+    })} catch (err){
+        console.log(err)
+    }
 
     await browser.close();
 }
