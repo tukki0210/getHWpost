@@ -103,7 +103,7 @@ export const handler = async (event, context) => {
             const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent;
             const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
             const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
-            const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent;
+            const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent.replace(/\s+/g, "");
             const postData = element.querySelector('tr:nth-child(2) div.fs13.ml01').textContent;
             const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href').substring(2);
 
@@ -128,18 +128,18 @@ export const handler = async (event, context) => {
 
     const client = new WebClient(token);
 
-
     await Promise.all(results.slice(0, 2).map(async result => {
 
-        const text = `
-職種：${result.Occupation}\n
+        const text = 
+`
 会社名：${result.companyName}\n
+職種：${result.Occupation}\n
 仕事の内容：${result.jobDirection}\n
 雇用形態：${result.jobStyle}\n
 賃金：${result.jobSaraly}\n
 日付：${result.postData}\n
 求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}
-        `
+`
 
         const response = await client.chat.postMessage({ channel, text });
     }))
