@@ -117,34 +117,33 @@ export const handler = async (event, context) => {
         })
     })
 
-    const message = `
-        職種：${results.Occupation}\n
-        会社：${results.companyName}\n
-        仕事の内容：${results.jobDirection}\n
-        雇用形態：${results.jobStyle}\n
-        賃金：${results.jobSaraly}\n
-        求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${results.jobURL}
-    `
-
-
-    console.log(message)
-
-    const endpoint = 'https://slack.com/api/chat.postMessage';
-    try {
-    const res = await fetch(endpoint, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            token: process.env.SLACK_TOKEN,
-            channel: process.env.SLACK_CHANNEL,
-            text: message
-        })
-    })} catch (err){
-        console.log(err)
-    }
 
     await browser.close();
+
+    results.map(result => {
+        const message = `
+            職種：${result.Occupation}\n
+            会社：${result.companyName}\n
+            仕事の内容：${result.jobDirection}\n
+            雇用形態：${result.jobStyle}\n
+            賃金：${result.jobSaraly}\n
+            求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${result.jobURL}
+        `
+        console.log(message)
+
+        const endpoint = 'https://slack.com/api/chat.postMessage';
+
+        const res = fetch(endpoint, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: process.env.SLACK_TOKEN,
+                channel: process.env.SLACK_CHANNEL,
+                text: message
+            })
+        })
+    })
 }
 
