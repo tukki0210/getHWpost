@@ -106,40 +106,41 @@ export const handler = async (event, context) => {
 
             const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href').substring(2);
 
-            const message = `
-                職種：${Occupation}\n
-                会社：${companyName}\n
-                仕事の内容：${jobDirection}\n
-                雇用形態：${jobStyle}\n
-                賃金：${jobSaraly}\n
-                求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${jobURL}
-                `
-
-
-            // return {
-            //     '職種': Occupation,
-            //     '会社名': companyName,
-            //     '仕事の内容': jobDirection,
-            //     '雇用形態': jobStyle,
-            //     '賃金':jobSaraly,
-            //     '求人票': 'https://www.hellowork.mhlw.go.jp/kensaku/' + jobURL
-            // }
-            const endpoint = 'https://slack.com/api/chat.postMessage'
-            fetch(endpoint, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    token: process.env.SLACK_TOKEN,
-                    channel: process.env.SLACK_CHANNEL,
-                    text: message
-                })
-            })
+            return {
+                Occupation,
+                companyName,
+                jobDirection,
+                jobStyle,
+                jobSaraly,
+                jobURL
+            }
         })
     })
 
     console.log(results)
+
+    const message = `
+        職種：${results.Occupation}\n
+        会社：${results.companyName}\n
+        仕事の内容：${results.jobDirection}\n
+        雇用形態：${results.jobStyle}\n
+        賃金：${results.jobSaraly}\n
+        求人票：'https://www.hellowork.mhlw.go.jp/kensaku/' ${results.jobURL}
+    `
+
+    const endpoint = 'https://slack.com/api/chat.postMessage';
+    const res = await fetch(endpoint, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            token: process.env.SLACK_TOKEN,
+            channel: process.env.SLACK_CHANNEL,
+            text: message
+        })
+
+    })
 
     await browser.close();
 }
