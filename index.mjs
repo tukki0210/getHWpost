@@ -129,21 +129,22 @@ export const handler = async (event, context) => {
 }
 
 const postSlack = async (token, channel, results) => {
-    
+
 
     const client = new WebClient(token);
 
     await Promise.all(results.slice(0, 1).map(async result => {
 
-        const text =　`【新着求人】\n
-                        会社名：${result.companyName}\n
-                        職種：${result.Occupation}\n
-                        仕事の内容：${result.jobDirection}\n
-                        雇用形態：${result.jobStyle}\n
-                        賃金：${result.jobSaraly}\n
-                        日付：${result.postData}\n
-                        求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}
-                    `.replace(/^\t|\s+$|^ {4}/gm,'')
+        const text = [
+            '【新着求人】',
+            `会社名：${result.companyName}`,
+            `職種：${result.Occupation}`,
+            `仕事の内容：${result.jobDirection}`,
+            `雇用形態：${result.jobStyle}`,
+            `賃金：${result.jobSaraly}`,
+            `日付：${result.postData}`,
+            `求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}`
+        ].join('\n');
 
         const response = await client.chat.postMessage({ channel, text });
     }))
