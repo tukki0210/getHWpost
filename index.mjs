@@ -8,7 +8,6 @@ export const handler = async (event, context) => {
     const token = process.env.SLACK_TOKEN
 
     const date = new Date();
-    date.setDate(date.getDate() - 1)
 
     const dateString = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
 
