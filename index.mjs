@@ -8,7 +8,7 @@ export const handler = async (event, context) => {
     const token = process.env.SLACK_TOKEN
 
     const today = new Date();
-    const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`
+    const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()-1}日`
 
     // 25 滋賀県
     // 26 京都府
@@ -155,7 +155,7 @@ const postSlack = async (token, channel, results, date) => {
 
     const client = new WebClient(token);
 
-    await Promise.all(results.slice(0, 2).map(async result => {
+    await Promise.all(results.map(async result => {
 
         if (date === result.postDate) {
             const text = [
