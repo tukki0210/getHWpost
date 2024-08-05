@@ -20,15 +20,15 @@ export const handler = async (event, context) => {
 
     const results_kyoto = await getPostByPref(26)
     const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO
-    await postSlack(token, channel_kyoto, results_kyoto, date)
+    await postSlack(token, channel_kyoto, results_kyoto, dateString)
 
     const results_osaka = await getPostByPref(27)
     const channel_osaka = process.env.SLACK_CHANNEL_OSAKA
-    await postSlack(token, channel_osaka, results_osaka, date)
+    await postSlack(token, channel_osaka, results_osaka, dateString)
 
     const results_nara = await getPostByPref(29)
     const channel_nara = process.env.SLACK_CHANNEL_NARA
-    await postSlack(token, channel_nara, results_nara, date)
+    await postSlack(token, channel_nara, results_nara, dateString)
 
 }
 
