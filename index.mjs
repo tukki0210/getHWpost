@@ -125,10 +125,10 @@ export const handler = async (event, context) => {
 
     const channel = process.env.SLACK_CHANNEL
 
-    await postSlack(token, channel)
+    await postSlack(token, channel, results)
 }
 
-const postSlack = async (token, channel) => {
+const postSlack = async (token, channel, results) => {
     
 
     const client = new WebClient(token);
@@ -143,7 +143,7 @@ const postSlack = async (token, channel) => {
                         賃金：${result.jobSaraly}\n
                         日付：${result.postData}\n
                         求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}
-                    `.replace(/^\s+$|^ {4}/gm,'')
+                    `.replace(/^\t|\s+$|^ {4}/gm,'')
 
         const response = await client.chat.postMessage({ channel, text });
     }))
