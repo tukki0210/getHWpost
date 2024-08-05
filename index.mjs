@@ -8,7 +8,7 @@ export const handler = async (event, context) => {
     const token = process.env.SLACK_TOKEN
 
     const today = new Date();
-    const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}`
+    const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`
 
     // 25 滋賀県
     // 26 京都府
