@@ -5,6 +5,16 @@ import { WebClient } from '@slack/web-api'
 
 export const handler = async (event, context) => {
 
+    const prefNumber = 28
+    const results = await getPostByPref(28)
+
+    const token = process.env.SLACK_TOKEN
+    const channel = process.env.SLACK_CHANNEL
+
+    await postSlack(token, channel, results)
+}
+
+const getPostByPref = async (prefNumber) => {
     const browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
@@ -22,7 +32,7 @@ export const handler = async (event, context) => {
         'kSNoGe': '',
         'kjKbnRadioBtn': '1',
         'nenreiInput': '',
-        'tDFK1CmbBox': '29', //奈良県
+        'tDFK1CmbBox': prefNumber, //奈良県
         'tDFK2CmbBox': '',
         'tDFK3CmbBox': '',
         'sKGYBRUIJo1': '',
@@ -121,11 +131,7 @@ export const handler = async (event, context) => {
 
 
     await browser.close();
-    const token = process.env.SLACK_TOKEN
-
-    const channel = process.env.SLACK_CHANNEL
-
-    await postSlack(token, channel, results)
+    return results
 }
 
 const postSlack = async (token, channel, results) => {
