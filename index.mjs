@@ -5,13 +5,22 @@ import { WebClient } from '@slack/web-api'
 
 export const handler = async (event, context) => {
 
-    const prefNumber = 28
-    const results = await getPostByPref(28)
 
     const token = process.env.SLACK_TOKEN
-    const channel = process.env.SLACK_CHANNEL
 
-    await postSlack(token, channel, results)
+
+    // 25 滋賀県
+    // 26 京都府
+    // 27 大阪府
+    // 28 兵庫県
+    // 29 奈良県
+    const results_nara = await getPostByPref(29)
+    const channel_nara = process.env.SLACK_CHANNEL_NARA
+    await postSlack(token, channel_nara, results_nara)
+
+    const results_osaka = await getPostByPref(27)
+    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA
+    await postSlack(token, channel_osaka, results_osaka)
 }
 
 const getPostByPref = async (prefNumber) => {
