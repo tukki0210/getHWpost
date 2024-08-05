@@ -7,8 +7,10 @@ export const handler = async (event, context) => {
 
     const token = process.env.SLACK_TOKEN
 
-    const today = new Date();
-    const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()-1}日`
+    const date = new Date();
+    date.setDate(date.getDate() - 1)
+
+    const dateString = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
 
     // 25 滋賀県
     // 26 京都府
@@ -60,20 +62,6 @@ const getPostByPref = async (prefNumber) => {
         'freeWordInput': '',
         'nOTKNSKFreeWordInput': '',
         'searchBtn': '%E6%A4%9C%E7%B4%A2',
-        'kJNoJo1': '',
-        'kJNoGe1': '',
-        'kJNoJo2': '',
-        'kJNoGe2': '',
-        'kJNoJo3': '',
-        'kJNoGe3': '',
-        'kJNoJo4': '',
-        'kJNoGe4': '',
-        'kJNoJo5': '',
-        'kJNoGe5': '',
-        'jGSHNoJo': '',
-        'jGSHNoChuu': '',
-        'jGSHNoGe': '',
-        'kyujinkensu': '0',
         'iNFTeikyoRiyoDantaiID': '',
         'searchClear': '0',
         'siku1Hidden': '',
