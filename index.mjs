@@ -121,28 +121,30 @@ export const handler = async (event, context) => {
 
 
     await browser.close();
-
     const token = process.env.SLACK_TOKEN
 
     const channel = process.env.SLACK_CHANNEL
 
+    await postSlack(token, channel)
+}
+
+const postSlack = async (token, channel) => {
+    
+
     const client = new WebClient(token);
 
-    await Promise.all(results.slice(0, 2).map(async result => {
+    await Promise.all(results.slice(0, 1).map(async result => {
 
-        const text = 
-`
-【新着求人】\n
-会社名：${result.companyName}\n
-職種：${result.Occupation}\n
-仕事の内容：${result.jobDirection}\n
-雇用形態：${result.jobStyle}\n
-賃金：${result.jobSaraly}\n
-日付：${result.postData}\n
-求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}
-`
+        const text =　`【新着求人】\n
+                        会社名：${result.companyName}\n
+                        職種：${result.Occupation}\n
+                        仕事の内容：${result.jobDirection}\n
+                        雇用形態：${result.jobStyle}\n
+                        賃金：${result.jobSaraly}\n
+                        日付：${result.postData}\n
+                        求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}
+                    `.replace(/^\s+$|^ {4}/gm,'')
 
         const response = await client.chat.postMessage({ channel, text });
     }))
 }
-
