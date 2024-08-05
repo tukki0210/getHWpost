@@ -8,19 +8,23 @@ export const handler = async (event, context) => {
 
     const token = process.env.SLACK_TOKEN
 
-
     // 25 滋賀県
     // 26 京都府
     // 27 大阪府
     // 28 兵庫県
     // 29 奈良県
-    const results_nara = await getPostByPref(29)
-    const channel_nara = process.env.SLACK_CHANNEL_NARA
-    await postSlack(token, channel_nara, results_nara)
+    const results_kyoto = await getPostByPref(26)
+    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO
+    await postSlack(token, channel_kyoto, results_kyoto)
 
     const results_osaka = await getPostByPref(27)
     const channel_osaka = process.env.SLACK_CHANNEL_OSAKA
     await postSlack(token, channel_osaka, results_osaka)
+
+    const results_nara = await getPostByPref(29)
+    const channel_nara = process.env.SLACK_CHANNEL_NARA
+    await postSlack(token, channel_nara, results_nara)
+
 }
 
 const getPostByPref = async (prefNumber) => {
