@@ -5,25 +5,28 @@ import { WebClient } from '@slack/web-api'
 
 export const handler = async (event, context) => {
 
-
     const token = process.env.SLACK_TOKEN
+
+    const today = new Date();
+    const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}`
 
     // 25 滋賀県
     // 26 京都府
     // 27 大阪府
     // 28 兵庫県
     // 29 奈良県
+
     const results_kyoto = await getPostByPref(26)
     const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO
-    await postSlack(token, channel_kyoto, results_kyoto)
+    await postSlack(token, channel_kyoto, results_kyoto, date)
 
     const results_osaka = await getPostByPref(27)
     const channel_osaka = process.env.SLACK_CHANNEL_OSAKA
-    await postSlack(token, channel_osaka, results_osaka)
+    await postSlack(token, channel_osaka, results_osaka, date)
 
     const results_nara = await getPostByPref(29)
     const channel_nara = process.env.SLACK_CHANNEL_NARA
-    await postSlack(token, channel_nara, results_nara)
+    await postSlack(token, channel_nara, results_nara, date)
 
 }
 
@@ -127,7 +130,7 @@ const getPostByPref = async (prefNumber) => {
             const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
             const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
             const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent.replace(/\s+/g, "");
-            const postData = element.querySelector('tr:nth-child(2) div.fs13.ml01').textContent;
+            const postDate = element.querySelector('tr:nth-child(2) div.fs13.ml01').textContent;
             const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href').substring(2);
 
             return {
@@ -136,7 +139,7 @@ const getPostByPref = async (prefNumber) => {
                 jobDirection,
                 jobStyle,
                 jobSaraly,
-                postData,
+                postDate,
                 jobURL
             }
         })
@@ -147,24 +150,26 @@ const getPostByPref = async (prefNumber) => {
     return results
 }
 
-const postSlack = async (token, channel, results) => {
+const postSlack = async (token, channel, results, date) => {
 
 
     const client = new WebClient(token);
 
-    await Promise.all(results.slice(0, 1).map(async result => {
+    await Promise.all(results.slice(0, 2).map(async result => {
 
-        const text = [
-            '【新着求人】',
-            `会社名：${result.companyName}`,
-            `職種：${result.Occupation}`,
-            `仕事の内容：${result.jobDirection}`,
-            `雇用形態：${result.jobStyle}`,
-            `賃金：${result.jobSaraly}`,
-            `日付：${result.postData}`,
-            `求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}`
-        ].join('\n');
+        if (date === result.postDate) {
+            const text = [
+                '【新着求人】',
+                `会社名：${result.companyName}`,
+                `職種：${result.Occupation}`,
+                `仕事の内容：${result.jobDirection}`,
+                `雇用形態：${result.jobStyle}`,
+                `賃金：${result.jobSaraly}`,
+                `日付：${result.postDate}`,
+                `求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}`
+            ].join('\n');
 
-        const response = await client.chat.postMessage({ channel, text });
+            const response = await client.chat.postMessage({ channel, text });
+        }
     }))
 }
