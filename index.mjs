@@ -146,7 +146,7 @@ const postSlack = async (token, channel, results, date) => {
 
         if (date === result.postDate) {
             const text = [
-                '【新着求人】',
+                '【本日の新着求人】',
                 `会社名：${result.companyName}`,
                 `職種：${result.Occupation}`,
                 `仕事の内容：${result.jobDirection}`,
