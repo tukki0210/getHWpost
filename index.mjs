@@ -132,14 +132,14 @@ const getPostByPref = async (prefNumber) => {
         })
     })
 
-
     await browser.close();
+
     return results
 }
 
 const postSlack = async (token, channel, results, date) => {
 
-
+    
     const client = new WebClient(token);
 
     await Promise.all(results.map(async result => {
@@ -153,7 +153,7 @@ const postSlack = async (token, channel, results, date) => {
                 `雇用形態：${result.jobStyle}`,
                 `賃金：${result.jobSaraly}`,
                 `日付：${result.postDate}`,
-                `求人票：'https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}`
+                `求人票：https://www.hellowork.mhlw.go.jp/kensaku/${result.jobURL}`
             ].join('\n');
 
             const response = await client.chat.postMessage({ channel, text });
