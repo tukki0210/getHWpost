@@ -66,7 +66,7 @@ const getPostByPref = async (prefNumber) => {
         'siku1Hidden': '',
         'siku2Hidden': '',
         'siku3Hidden': '',
-        'kiboSuruSKSU1Hidden': '09%2C4+', //希望職種１
+        'kiboSuruSKSU1Hidden': '09%2C10%2C4%20%2C5', //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
         'kiboSuruSKSU2Hidden': '',
         'kiboSuruSKSU3Hidden': '',
         'summaryDisp': 'false',
