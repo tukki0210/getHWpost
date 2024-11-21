@@ -31,25 +31,13 @@ export const handler = async (event, context) => {
 
 }
 
-const getPostByPref = async (prefNumber) => {
-    const browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
-        headless: chromium.headless,
-        ignoreHTTPSErrors: true,
-    });
-
-    const page = await browser.newPage();
-
-    await page.setRequestInterception(true);
-
+const getPostData = (prefNum) => {
     const postDataObject = {
         'kSNoJo': '',
         'kSNoGe': '',
         'kjKbnRadioBtn': '1',
         'nenreiInput': '',
-        'tDFK1CmbBox': prefNumber, //奈良県
+        'tDFK1CmbBox': prefNum, //県番号
         'tDFK2CmbBox': '',
         'tDFK3CmbBox': '',
         'sKGYBRUIJo1': '',
@@ -82,10 +70,24 @@ const getPostByPref = async (prefNumber) => {
         'maba_vrbs': 'infTkRiyoDantaiBtn%2CsearchShosaiBtn%2CsearchBtn%2CsearchNoBtn%2CsearchClearBtn%2CdispDetailBtn%2CkyujinhyoBtn',
         'preCheckFlg': 'false',
     }
+    // オブジェクトを入力用の文字列に変換して返す
+    return Object.entries(postDataObject).map(data => data.join('=')).join('&');
+}
 
-    // オブジェクトを入力用の文字列に変換する
-    const postData = Object.entries(postDataObject).map(data => data.join('=')).join('&')
+const getPostByPref = async (prefNum) => {
+    const browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
+    });
 
+    const page = await browser.newPage();
+
+    await page.setRequestInterception(true);
+
+    const postData = getPostData(prefNum);
 
     page.on('request', interceptedRequest => {
 
@@ -139,7 +141,6 @@ const getPostByPref = async (prefNumber) => {
 
 const postSlack = async (token, channel, results, date) => {
 
-    
     const client = new WebClient(token);
 
     await Promise.all(results.map(async result => {
