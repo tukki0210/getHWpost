@@ -3,9 +3,20 @@ import chromium from '@sparticuz/chromium'
 import { WebClient } from '@slack/web-api'
 
 
-export const handler = async (event, context) => {
+interface JobPost {
+    Occupation: string | null;
+    companyName: string | null;
+    jobDirection: string | null;
+    jobStyle: string | null;
+    jobSaraly: string | null;
+    postDate: string | null;
+    jobURL: string | null;
+}
 
-    const token = process.env.SLACK_TOKEN
+
+export const handler = async (event: unknown, context: unknown): Promise<void> => {
+
+    const token = process.env.SLACK_TOKEN ?? "";
 
     const date = new Date();
 
@@ -18,20 +29,20 @@ export const handler = async (event, context) => {
     // 29 奈良県
 
     const results_kyoto = await getPostByPref(createPostData(26))
-    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO
+    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO ?? "";
     await postSlack(token, channel_kyoto, results_kyoto, dateString)
 
     const results_osaka = await getPostByPref(createPostData(27))
-    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA
+    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? ""
     await postSlack(token, channel_osaka, results_osaka, dateString)
 
     const results_nara = await getPostByPref(createPostData(29))
-    const channel_nara = process.env.SLACK_CHANNEL_NARA
+    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? ""
     await postSlack(token, channel_nara, results_nara, dateString)
 
 }
 
-const createPostData = (prefNum) => {
+export const createPostData = (prefNum: number): string => {
     const postDataObject = {
         'kSNoJo': '',
         'kSNoGe': '',
@@ -74,7 +85,7 @@ const createPostData = (prefNum) => {
     return Object.entries(postDataObject).map(data => data.join('=')).join('&');
 }
 
-const getPostByPref = async (data) => {
+export const getPostByPref = async (data: string): Promise<JobPost[]> => {
     const browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
@@ -107,28 +118,19 @@ const getPostByPref = async (data) => {
 
     await page.goto(url)
 
-    const results = await page.evaluate(() => {
+    const results: JobPost[] = await page.evaluate(() => {
         const elements = document.querySelectorAll('form table.kyujin.mt1.noborder');
         return Array.from(elements).map(element => {
-            const Occupation = element.querySelector('tr.kyujin_head table td:nth-child(2) div').textContent;
-
+            const Occupation = element.querySelector('tr.kyujin_head table td:nth-child(2) div')?.textContent ?? null;
             const leftData = element.querySelector('.kyujin_body .left-side');
-            const companyName = leftData.querySelector('tr:nth-child(2) td:nth-child(2) div').textContent;
-            const jobDirection = leftData.querySelector('tr:nth-child(4) td:nth-child(2) div').textContent
-            const jobStyle = leftData.querySelector('tr:nth-child(5) td:nth-child(2) div').textContent;
-            const jobSaraly = leftData.querySelector('tr:nth-child(6) td:nth-child(2) div').textContent.replace(/\s+/g, "");
-            const postDate = element.querySelector('tr:nth-child(2) div.fs13.ml01').textContent;
-            const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn').getAttribute('href').substring(2);
+            const companyName = leftData?.querySelector('tr:nth-child(2) td:nth-child(2) div')?.textContent ?? null;
+            const jobDirection = leftData?.querySelector('tr:nth-child(4) td:nth-child(2) div')?.textContent ?? null;
+            const jobStyle = leftData?.querySelector('tr:nth-child(5) td:nth-child(2) div')?.textContent ?? null;
+            const jobSaraly = leftData?.querySelector('tr:nth-child(6) td:nth-child(2) div')?.textContent?.replace(/\s+/g, "") ?? null;
+            const postDate = element.querySelector('tr:nth-child(2) div.fs13.ml01')?.textContent ?? null;
+            const jobURL = element.querySelector('.kyujin_foot #ID_kyujinhyoBtn')?.getAttribute('href')?.substring(2) ?? null;
 
-            return {
-                Occupation,
-                companyName,
-                jobDirection,
-                jobStyle,
-                jobSaraly,
-                postDate,
-                jobURL
-            }
+            return { Occupation, companyName, jobDirection, jobStyle, jobSaraly, postDate, jobURL };
         })
     })
 
@@ -137,11 +139,11 @@ const getPostByPref = async (data) => {
     return results
 }
 
-const postSlack = async (token, channel, results, date) => {
+export const postSlack = async (token: string, channel: string, results: JobPost[], date: string): Promise<void> => {
 
     const client = new WebClient(token);
 
-    await Promise.all(results.map(async result => {
+    await Promise.all(results.map(async (result) => {
 
         if (date === result.postDate) {
             const text = [
