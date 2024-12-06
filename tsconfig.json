@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Node.js環境用にES2020をターゲット
+    "module": "CommonJS", // CommonJSモジュールを使用
+    "outDir": "./dist", // 出力先ディレクトリをdistに指定
+    "rootDir": "./src", // ソースコードがsrcディレクトリにあることを指定
+    "esModuleInterop": true, // ESモジュールとCommonJSモジュール間の互換性を保つ
+    "skipLibCheck": true, // 型定義のチェックをスキップ（高速化）
+    "strict": true, // 厳格な型チェックを有効にする
+    "declaration": false, // 型定義ファイル(.d.ts)を生成しない
+    "sourceMap": true, // ソースマップを生成
+    "lib": [
+      "ES2020",
+      "DOM"
+    ], // 必要なライブラリを指定
+    "moduleResolution": "node" // Node.jsのモジュール解決方式を使用
+  },
+  "include": [
+    "src/**/*.ts" // ソースコードのパス
+  ],
+  "exclude": [
+    "node_modules", // node_modulesは除外
+    "dist", // 出力先のdistディレクトリも除外
+    "coverage" // カバレッジレポートも除外
+  ]
+}

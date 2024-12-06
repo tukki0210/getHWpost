@@ -9,7 +9,7 @@ jest.mock('puppeteer-core');
 jest.mock('@sparticuz/chromium');
 
 const mockPostMessage = jest.fn();
-(WebClient as jest.Mock).mockImplementation(() => ({
+(WebClient as unknown as jest.Mock).mockImplementation(() => ({
     chat: { postMessage: mockPostMessage },
 }))
 
@@ -18,7 +18,7 @@ const mockLaunch = jest.fn();
 puppeteer.launch = mockLaunch;
 
 // getPostByPrefのモック
-jest.mock('./index',()=>({
+jest.mock('./index', () => ({
     ...jest.requireActual('./index'),
     getPostByPref: jest.fn(),
 }))
