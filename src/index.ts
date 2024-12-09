@@ -14,41 +14,14 @@ interface JobPost {
 }
 
 
-export const handler = async (event: unknown, context: unknown): Promise<void> => {
 
-    const token = process.env.SLACK_TOKEN ?? "";
-
-    const date = new Date();
-
-    const dateString = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
-
-    // 25 滋賀県
-    // 26 京都府
-    // 27 大阪府
-    // 28 兵庫県
-    // 29 奈良県
-
-    const results_kyoto = await getPostByPref(createPostData(26))
-    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO ?? "";
-    await postSlack(token, channel_kyoto, results_kyoto, dateString)
-
-    const results_osaka = await getPostByPref(createPostData(27))
-    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? ""
-    await postSlack(token, channel_osaka, results_osaka, dateString)
-
-    const results_nara = await getPostByPref(createPostData(29))
-    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? ""
-    await postSlack(token, channel_nara, results_nara, dateString)
-
-}
-
-export const createPostData = (prefNum: number): string => {
+export const createPostData = (prefNum: number, kiboSyokusyu: string = '09%2C10%2C4%20%2C5'): string => {
     const postDataObject = {
         'kSNoJo': '',
         'kSNoGe': '',
         'kjKbnRadioBtn': '1',
         'nenreiInput': '',
-        'tDFK1CmbBox': prefNum, //県番号
+        'tDFK1CmbBox': prefNum,
         'tDFK2CmbBox': '',
         'tDFK3CmbBox': '',
         'sKGYBRUIJo1': '',
@@ -65,7 +38,7 @@ export const createPostData = (prefNum: number): string => {
         'siku1Hidden': '',
         'siku2Hidden': '',
         'siku3Hidden': '',
-        'kiboSuruSKSU1Hidden': '09%2C10%2C4%20%2C5', //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
+        'kiboSuruSKSU1Hidden': kiboSyokusyu,
         'kiboSuruSKSU2Hidden': '',
         'kiboSuruSKSU3Hidden': '',
         'summaryDisp': 'false',
@@ -160,4 +133,35 @@ export const postSlack = async (token: string, channel: string, results: JobPost
             const response = await client.chat.postMessage({ channel, text });
         }
     }))
+}
+
+
+export const handler = async (event: unknown, context: unknown): Promise<void> => {
+
+    const token = process.env.SLACK_TOKEN ?? "";
+
+    const date = new Date();
+
+    const dateString = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
+
+    // 25 滋賀県
+    // 26 京都府
+    // 27 大阪府
+    // 28 兵庫県
+    // 29 奈良県
+
+    const kiboSyokusyu = '09%2C10%2C4%20%2C5'
+    //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
+
+    const results_kyoto = await getPostByPref(createPostData(26))
+    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO ?? "";
+    await postSlack(token, channel_kyoto, results_kyoto, dateString)
+
+    const results_osaka = await getPostByPref(createPostData(27))
+    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? ""
+    await postSlack(token, channel_osaka, results_osaka, dateString)
+
+    const results_nara = await getPostByPref(createPostData(29))
+    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? ""
+    await postSlack(token, channel_nara, results_nara, dateString)
 }
