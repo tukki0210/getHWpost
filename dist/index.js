@@ -3,37 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postSlack = exports.getPostByPref = exports.createPostData = exports.handler = void 0;
+exports.handler = exports.postSlack = exports.getPostByPref = exports.createPostData = void 0;
 const puppeteer_core_1 = __importDefault(require("puppeteer-core"));
 const chromium_1 = __importDefault(require("@sparticuz/chromium"));
 const web_api_1 = require("@slack/web-api");
-const handler = async (event, context) => {
-    const token = process.env.SLACK_TOKEN ?? "";
-    const date = new Date();
-    const dateString = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-    // 25 滋賀県
-    // 26 京都府
-    // 27 大阪府
-    // 28 兵庫県
-    // 29 奈良県
-    const results_kyoto = await (0, exports.getPostByPref)((0, exports.createPostData)(26));
-    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO ?? "";
-    await (0, exports.postSlack)(token, channel_kyoto, results_kyoto, dateString);
-    const results_osaka = await (0, exports.getPostByPref)((0, exports.createPostData)(27));
-    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? "";
-    await (0, exports.postSlack)(token, channel_osaka, results_osaka, dateString);
-    const results_nara = await (0, exports.getPostByPref)((0, exports.createPostData)(29));
-    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? "";
-    await (0, exports.postSlack)(token, channel_nara, results_nara, dateString);
-};
-exports.handler = handler;
-const createPostData = (prefNum) => {
+const createPostData = ({ prefNum, kiboSyokusyu = '09%2C10%2C4%20%2C5', freeWord = '' }) => {
     const postDataObject = {
         'kSNoJo': '',
         'kSNoGe': '',
         'kjKbnRadioBtn': '1',
         'nenreiInput': '',
-        'tDFK1CmbBox': prefNum, //県番号
+        'tDFK1CmbBox': prefNum,
         'tDFK2CmbBox': '',
         'tDFK3CmbBox': '',
         'sKGYBRUIJo1': '',
@@ -42,7 +22,7 @@ const createPostData = (prefNum) => {
         'sKGYBRUIGe2': '',
         'sKGYBRUIJo3': '',
         'sKGYBRUIGe3': '',
-        'freeWordInput': '',
+        'freeWordInput': freeWord,
         'nOTKNSKFreeWordInput': '',
         'searchBtn': '%E6%A4%9C%E7%B4%A2',
         'iNFTeikyoRiyoDantaiID': '',
@@ -50,7 +30,7 @@ const createPostData = (prefNum) => {
         'siku1Hidden': '',
         'siku2Hidden': '',
         'siku3Hidden': '',
-        'kiboSuruSKSU1Hidden': '09%2C10%2C4%20%2C5', //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
+        'kiboSuruSKSU1Hidden': kiboSyokusyu,
         'kiboSuruSKSU2Hidden': '',
         'kiboSuruSKSU3Hidden': '',
         'summaryDisp': 'false',
@@ -134,4 +114,32 @@ const postSlack = async (token, channel, results, date) => {
     }));
 };
 exports.postSlack = postSlack;
+const handler = async (event, context) => {
+    const token = process.env.SLACK_TOKEN ?? "";
+    const date = new Date();
+    const dateString = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+    // 25 滋賀県
+    // 26 京都府
+    // 27 大阪府
+    // 28 兵庫県
+    // 29 奈良県
+    const kiboSyokusyu = '09%2C10%2C4%20%2C5';
+    //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
+    const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO ?? "";
+    const results_kyoto = await (0, exports.getPostByPref)((0, exports.createPostData)({ prefNum: 26 }));
+    await (0, exports.postSlack)(token, channel_kyoto, results_kyoto, dateString);
+    const results_DX_kyoto = await (0, exports.getPostByPref)((0, exports.createPostData)({ prefNum: 26, kiboSyokusyu: '', freeWord: 'DX' }));
+    await (0, exports.postSlack)(token, channel_kyoto, results_DX_kyoto, dateString);
+    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? "";
+    const results_osaka = await (0, exports.getPostByPref)((0, exports.createPostData)({ prefNum: 27 }));
+    await (0, exports.postSlack)(token, channel_osaka, results_osaka, dateString);
+    const results_DX_osaka = await (0, exports.getPostByPref)((0, exports.createPostData)({ prefNum: 27, kiboSyokusyu: '', freeWord: 'DX' }));
+    await (0, exports.postSlack)(token, channel_osaka, results_DX_osaka, dateString);
+    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? "";
+    const results_nara = await (0, exports.getPostByPref)((0, exports.createPostData)({ prefNum: 29 }));
+    await (0, exports.postSlack)(token, channel_nara, results_nara, dateString);
+    const results_DX_nara = await (0, exports.getPostByPref)((0, exports.createPostData)({ prefNum: 29, kiboSyokusyu: '', freeWord: 'DX' }));
+    await (0, exports.postSlack)(token, channel_nara, results_DX_nara, dateString);
+};
+exports.handler = handler;
 //# sourceMappingURL=index.js.map

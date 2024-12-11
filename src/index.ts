@@ -13,9 +13,13 @@ interface JobPost {
     jobURL: string | null;
 }
 
+type PostData = {
+    prefNum: number,
+    kiboSyokusyu?: string,
+    freeWord?: string
+}
 
-
-export const createPostData = (prefNum: number, kiboSyokusyu: string = '09%2C10%2C4%20%2C5'): string => {
+export const createPostData = ({ prefNum, kiboSyokusyu = '09%2C10%2C4%20%2C5', freeWord = '' }: PostData): string => {
     const postDataObject = {
         'kSNoJo': '',
         'kSNoGe': '',
@@ -30,7 +34,7 @@ export const createPostData = (prefNum: number, kiboSyokusyu: string = '09%2C10%
         'sKGYBRUIGe2': '',
         'sKGYBRUIJo3': '',
         'sKGYBRUIGe3': '',
-        'freeWordInput': '',
+        'freeWordInput': freeWord,
         'nOTKNSKFreeWordInput': '',
         'searchBtn': '%E6%A4%9C%E7%B4%A2',
         'iNFTeikyoRiyoDantaiID': '',
@@ -153,15 +157,24 @@ export const handler = async (event: unknown, context: unknown): Promise<void> =
     const kiboSyokusyu = '09%2C10%2C4%20%2C5'
     //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
 
-    const results_kyoto = await getPostByPref(createPostData(26))
     const channel_kyoto = process.env.SLACK_CHANNEL_KYOTO ?? "";
-    await postSlack(token, channel_kyoto, results_kyoto, dateString)
 
-    const results_osaka = await getPostByPref(createPostData(27))
-    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? ""
-    await postSlack(token, channel_osaka, results_osaka, dateString)
+    const results_kyoto = await getPostByPref(createPostData({ prefNum: 26 }));
+    await postSlack(token, channel_kyoto, results_kyoto, dateString);
+    const results_DX_kyoto = await getPostByPref(createPostData({ prefNum: 26, kiboSyokusyu: '', freeWord: 'DX' }));
+    await postSlack(token, channel_kyoto, results_DX_kyoto, dateString);
 
-    const results_nara = await getPostByPref(createPostData(29))
-    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? ""
-    await postSlack(token, channel_nara, results_nara, dateString)
+
+    const channel_osaka = process.env.SLACK_CHANNEL_OSAKA ?? "";
+    const results_osaka = await getPostByPref(createPostData({ prefNum: 27 }));
+    await postSlack(token, channel_osaka, results_osaka, dateString);
+    const results_DX_osaka = await getPostByPref(createPostData({ prefNum: 27, kiboSyokusyu: '', freeWord: 'DX' }));
+    await postSlack(token, channel_osaka, results_DX_osaka, dateString);
+
+
+    const channel_nara = process.env.SLACK_CHANNEL_NARA ?? "";
+    const results_nara = await getPostByPref(createPostData({ prefNum: 29 }));
+    await postSlack(token, channel_nara, results_nara, dateString);
+    const results_DX_nara = await getPostByPref(createPostData({ prefNum: 29, kiboSyokusyu: '', freeWord: 'DX' }));
+    await postSlack(token, channel_nara, results_DX_nara, dateString);
 }

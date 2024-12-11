@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.45% </span>
+                <span class="strong">24.56% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/55</span>
+                <span class='fraction'>14/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">3.57% </span>
+                <span class="strong">6.89% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/28</span>
+                <span class='fraction'>2/29</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18% </span>
+                <span class="strong">17.3% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/50</span>
+                <span class='fraction'>9/52</span>
             </div>
         
             
@@ -230,9 +230,22 @@
 <a name='L165'></a><a href='#L165'>165</a>
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,7 +406,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -412,9 +430,13 @@ interface JobPost {
     jobURL: string | null;
 }
 &nbsp;
+type PostData = {
+    prefNum: number,
+    kiboSyokusyu?: string,
+    freeWord?: string
+}
 &nbsp;
-&nbsp;
-export const createPostData = (prefNum: number, kiboSyokusyu: string = '09%2C10%2C4%20%2C5'): string =&gt; {
+export const createPostData = ({ prefNum, kiboSyokusyu = '09%2C10%2C4%20%2C5', freeWord = '' }: PostData): string =&gt; {
     const postDataObject = {
         'kSNoJo': '',
         'kSNoGe': '',
@@ -429,7 +451,7 @@ export const createPostData = (prefNum: number, kiboSyokusyu: string = '09%2C10%
         'sKGYBRUIGe2': '',
         'sKGYBRUIJo3': '',
         'sKGYBRUIGe3': '',
-        'freeWordInput': '',
+        'freeWordInput': freeWord,
         'nOTKNSKFreeWordInput': '',
         'searchBtn': '%E6%A4%9C%E7%B4%A2',
         'iNFTeikyoRiyoDantaiID': '',
@@ -552,17 +574,22 @@ export const handler = <span class="fstat-no" title="function not covered" >asyn
     const kiboSyokusyu = <span class="cstat-no" title="statement not covered" >'09%2C10%2C4%20%2C5'</span>
     //希望職種１　「ウェブデザイナー」「ソフトウェア開発技術者、プログラマー」「その他の情報処理・通信技術者」
 &nbsp;
-    const results_kyoto = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData(26))</span>
+    const results_kyoto = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData({ prefNum: 26 }));</span>
     const channel_kyoto = <span class="cstat-no" title="statement not covered" >process.env.SLACK_CHANNEL_KYOTO ?? "";</span>
-<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_kyoto, results_kyoto, dateString)</span>
+<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_kyoto, results_kyoto, dateString);</span>
 &nbsp;
-    const results_osaka = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData(27))</span>
-    const channel_osaka = <span class="cstat-no" title="statement not covered" >process.env.SLACK_CHANNEL_OSAKA ?? ""</span>
-<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_osaka, results_osaka, dateString)</span>
+    const results_osaka = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData({ prefNum: 27 }));</span>
+    const channel_osaka = <span class="cstat-no" title="statement not covered" >process.env.SLACK_CHANNEL_OSAKA ?? "";</span>
+<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_osaka, results_osaka, dateString);</span>
 &nbsp;
-    const results_nara = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData(29))</span>
-    const channel_nara = <span class="cstat-no" title="statement not covered" >process.env.SLACK_CHANNEL_NARA ?? ""</span>
-<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_nara, results_nara, dateString)</span>
+&nbsp;
+&nbsp;
+    const results_nara = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData({ prefNum: 29 }));</span>
+    const channel_nara = <span class="cstat-no" title="statement not covered" >process.env.SLACK_CHANNEL_NARA ?? "";</span>
+<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_nara, results_nara, dateString);</span>
+&nbsp;
+    const results_DX_nara = <span class="cstat-no" title="statement not covered" >await getPostByPref(createPostData({ prefNum: 29, kiboSyokusyu: '', freeWord: 'DX' }));</span>
+<span class="cstat-no" title="statement not covered" >    await postSlack(token, channel_nara, results_DX_nara, dateString);</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -571,7 +598,7 @@ export const handler = <span class="fstat-no" title="function not covered" >asyn
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-09T07:56:10.340Z
+                at 2024-12-11T06:43:43.106Z
             </div>
         <script src="prettify.js"></script>
         <script>
