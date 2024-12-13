@@ -1,20 +1,15 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./index");
-const web_api_1 = require("@slack/web-api");
-const puppeteer_core_1 = __importDefault(require("puppeteer-core"));
+import { createPostData } from './index';
+import { WebClient } from '@slack/web-api';
+import puppeteer from 'puppeteer-core';
 jest.mock('@slack/web-api');
 jest.mock('@sparticuz/chromium');
 const mockPostMessage = jest.fn();
-web_api_1.WebClient.mockImplementation(() => ({
+WebClient.mockImplementation(() => ({
     chat: { postMessage: mockPostMessage },
 }));
 // puppeteerのモック
 const mockLaunch = jest.fn();
-puppeteer_core_1.default.launch = mockLaunch;
+puppeteer.launch = mockLaunch;
 // getPostByPrefのモック
 jest.mock('./index', () => ({
     ...jest.requireActual('./index'),
@@ -23,7 +18,7 @@ jest.mock('./index', () => ({
 describe('createPostData', () => {
     it('should generate correct query string with default kiboSyokusyu', () => {
         const prefNum = 13;
-        const result = (0, index_1.createPostData)({ prefNum });
+        const result = createPostData({ prefNum });
         // 結果が期待通りであるか検証
         expect(result).toContain('tDFK1CmbBox=13');
         expect(result).toContain('kiboSuruSKSU1Hidden=09%2C10%2C4%20%2C5');
@@ -33,7 +28,7 @@ describe('createPostData', () => {
     it('should generate correct query string with custom kiboSyokusyu', () => {
         const prefNum = 27;
         const customKiboSyokusyu = '01%2C02%2C03';
-        const result = (0, index_1.createPostData)({ prefNum, kiboSyokusyu: customKiboSyokusyu });
+        const result = createPostData({ prefNum, kiboSyokusyu: customKiboSyokusyu });
         // 結果が期待通りであるか検証
         expect(result).toContain('tDFK1CmbBox=27');
         expect(result).toContain(`kiboSuruSKSU1Hidden=${customKiboSyokusyu}`);
@@ -42,7 +37,7 @@ describe('createPostData', () => {
     });
     it('should include all required keys in the query string', () => {
         const prefNum = 40;
-        const result = (0, index_1.createPostData)({ prefNum });
+        const result = createPostData({ prefNum });
         // 全てのキーが結果に含まれるか検証
         const requiredKeys = [
             'kSNoJo', 'kSNoGe', 'kjKbnRadioBtn', 'nenreiInput',
