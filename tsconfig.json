@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020", // Node.js環境用にES2020をターゲット
-    "module": "CommonJS", // CommonJSモジュールを使用
+    "module": "ES2020", // CommonJSモジュールを使用
     "outDir": "./dist", // 出力先ディレクトリをdistに指定
     "rootDir": "./src", // ソースコードがsrcディレクトリにあることを指定
     "esModuleInterop": true, // ESモジュールとCommonJSモジュール間の互換性を保つ
