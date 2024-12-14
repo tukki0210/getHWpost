@@ -17,7 +17,7 @@
   },
   "include": [
     "src/**/*.ts" // ソースコードのパス
-  ],
+, "src/index.mts"  ],
   "exclude": [
     "node_modules", // node_modulesは除外
     "dist", // 出力先のdistディレクトリも除外

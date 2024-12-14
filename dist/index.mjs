@@ -132,4 +132,4 @@ export const handler = async (event, context) => {
     const results_DX_nara = await getPostByPref(createPostData({ prefNum: 29, kiboSyokusyu: '', freeWord: 'DX' }));
     await postSlack(token, channel_nara, results_DX_nara, dateString);
 };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.mjs.map

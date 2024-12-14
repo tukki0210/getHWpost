@@ -46,5 +46,5 @@ jobs:
 
       - name: Deploy to Lambda
         run: |
-          zip -j function.zip dist/index.js
+          zip -j function.zip dist/index.mjs
           aws lambda update-function-code --function-name getHWpost --zip-file fileb://function.zip

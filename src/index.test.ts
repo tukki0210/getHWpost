@@ -1,4 +1,4 @@
-import { handler, createPostData, getPostByPref, postSlack } from './index';
+import { handler, createPostData, getPostByPref, postSlack } from './index.mjs';
 
 import { WebClient } from '@slack/web-api';
 import puppeteer from 'puppeteer-core';
