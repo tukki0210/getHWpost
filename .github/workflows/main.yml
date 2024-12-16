@@ -46,7 +46,7 @@ jobs:
     
       - name: Rename .js to .mjs
         run: |
-          for file in dist/**/*.js; do
+          for file in dist/*.js; do
             mv "$file" "${file%.js}.mjs"
           done
 
