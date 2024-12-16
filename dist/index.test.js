@@ -1,4 +1,4 @@
-import { createPostData } from './index.mjs';
+import { createPostData } from './index.js';
 import { WebClient } from '@slack/web-api';
 import puppeteer from 'puppeteer-core';
 jest.mock('@slack/web-api');

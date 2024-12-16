@@ -1,4 +1,4 @@
-import { handler, createPostData, getPostByPref, postSlack } from './index.mjs';
+import { handler, createPostData, getPostByPref, postSlack } from './index';
 
 import { WebClient } from '@slack/web-api';
 import puppeteer from 'puppeteer-core';
@@ -26,7 +26,7 @@ jest.mock('./index', () => ({
 describe('createPostData', () => {
     it('should generate correct query string with default kiboSyokusyu', () => {
         const prefNum = 13;
-        const result = createPostData({prefNum});
+        const result = createPostData({ prefNum });
 
         // 結果が期待通りであるか検証
         expect(result).toContain('tDFK1CmbBox=13');
@@ -39,7 +39,7 @@ describe('createPostData', () => {
     it('should generate correct query string with custom kiboSyokusyu', () => {
         const prefNum = 27;
         const customKiboSyokusyu = '01%2C02%2C03';
-        const result = createPostData({prefNum, kiboSyokusyu:customKiboSyokusyu});
+        const result = createPostData({ prefNum, kiboSyokusyu: customKiboSyokusyu });
 
         // 結果が期待通りであるか検証
         expect(result).toContain('tDFK1CmbBox=27');
@@ -50,7 +50,7 @@ describe('createPostData', () => {
 
     it('should include all required keys in the query string', () => {
         const prefNum = 40;
-        const result = createPostData({prefNum});
+        const result = createPostData({ prefNum });
 
         // 全てのキーが結果に含まれるか検証
         const requiredKeys = [

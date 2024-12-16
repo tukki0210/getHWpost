@@ -43,6 +43,12 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
+    
+      - name: Rename .js to .mjs
+        run: |
+          for file in dist/**/*.js; do
+            mv "$file" "${file%.js}.mjs"
+          done
 
       - name: Deploy to Lambda
         run: |
